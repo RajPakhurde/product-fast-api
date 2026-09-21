@@ -44,7 +44,7 @@ button:disabled {
 
 /* ---- login ---- */
 .login {
-  max-width: 320px;
+  max-width: 350px;
   margin: 4rem auto;
   padding: 1.5rem;
   display: flex;
