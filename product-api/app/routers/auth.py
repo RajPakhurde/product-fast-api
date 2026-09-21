@@ -2,9 +2,9 @@ from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
 from ..database import get_db
 from ..models import User
-from ..schemas import UserCreate, UserResponse, UserLogin
+from ..schemas import UserCreate, UserResponse, UserLogin, Token, GoogleLoginRequest
 from ..auth import get_current_user
-from ..utils.security import(hash_password, verify_password, create_access_token, set_auth_cookie, clear_auth_cookie)
+from ..utils.security import(hash_password, verify_password, create_access_token, set_auth_cookie, clear_auth_cookie, verify_google_auth_token)
 
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
@@ -44,6 +44,38 @@ def login(user: UserLogin, response: Response, db: Session = Depends(get_db)):
 def me(current_user: User = Depends(get_current_user)):
     return current_user
 
+
+@router.post("/google", response_model=UserResponse)
+def google_login(request: GoogleLoginRequest, response: Response, db: Session = Depends(get_db)):
+
+    google_user = verify_google_auth_token(request.credential)
+
+    google_id = google_user["sub"]
+    email = google_user["email"]
+    name = google_user.get("name", email.split("@")[0])
+
+    user = db.query(User).filter(User.google_id == google_id).first()
+
+    if not user:
+        user = db.query(User).filter(User.email == email).first()
+
+    if not user:
+        user = User(username= name, email = email, google_id = google_id, password = None)
+
+        db.add(user)
+        db.commit()
+        db.refresh(user)
+
+    elif not user.google_id:
+        user.google_id = google_id
+        db.commit()
+        db.refresh(user)
+
+    access_token = create_access_token({"user_id": user.id, "user_email": user.email})
+
+    set_auth_cookie(response, access_token)
+
+    return user
 
 @router.post("/logout", status_code=204)
 def logout(response: Response):

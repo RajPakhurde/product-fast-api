@@ -1,13 +1,18 @@
 from  pwdlib import PasswordHash
 from jose import jwt
-from fastapi import Response
+from fastapi import Response, HTTPException
 import os
+import requests
+from google.oauth2 import id_token
+from google.auth.transport import requests
 
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = os.getenv("ALGORITHM")
 
 COOKIE_NAME = os.getenv("COOKIE_NAME")
 COOKIE_MAX_AGE = os.getenv("COOKIE_MAX_AGE")
+
+GOOGLE_CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 
 password_hash = PasswordHash.recommended()
 
@@ -33,3 +38,12 @@ def set_auth_cookie(response: Response, token: str):
 
 def clear_auth_cookie(response: Response):
     response.delete_cookie(key=COOKIE_NAME, path="/", samesite="lax")
+
+
+def verify_google_auth_token(token:str):
+    try:
+        google_user = id_token.verify_oauth2_token(token, requests.Request(), GOOGLE_CLIENT_ID)
+        return google_user
+
+    except ValueError:
+        raise HTTPException(status_code=401, detail="Invalid google token")
