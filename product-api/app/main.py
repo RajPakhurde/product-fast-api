@@ -3,7 +3,7 @@ load_dotenv()
 
 from fastapi import FastAPI
 from .database import Base, engine
-from .routers import auth, products
+from .routers import auth, products, users
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -33,6 +33,7 @@ app.mount("/uploads", StaticFiles(directory="uploads"), name="uploads")
 
 app.include_router(auth.router)
 app.include_router(products.router)
+app.include_router(users.router)
 
 @app.get("/health")
 def health():

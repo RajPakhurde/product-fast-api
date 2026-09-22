@@ -35,3 +35,14 @@ def get_current_user(request: Request,credentials: Optional[HTTPAuthorizationCre
         raise HTTPException(status_code=401, detail="user not found!!!")
 
     return user
+
+
+def require_role(require_role: str): 
+    def role_checker(current_user: User = Depends(get_current_user)):
+
+        if current_user.role != require_role:
+            raise HTTPException(status_code=403, detail="Forbidden: role not allowed to access")
+
+        return current_user
+
+    return role_checker

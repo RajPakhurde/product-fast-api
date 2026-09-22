@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, Float, ForeignKey
 from sqlalchemy.orm import relationship
 from .database import Base
+from sqlalchemy import Boolean
 
 class User(Base):
     __tablename__ = "users"
@@ -10,6 +11,8 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=True)
     google_id = Column(String, unique=True, nullable=True)
+    role = Column(String, nullable=False, default="USER")
+    google_auth_enabled = Column(Boolean, nullable=False, default=False)
 
     products = relationship("Product", back_populates="owner")
 
