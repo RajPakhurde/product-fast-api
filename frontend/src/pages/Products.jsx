@@ -6,7 +6,7 @@ import AddProductModal from '../components/AddProductModal'
 
 const LIMIT = 12
 
-function Products({ currentUser }) {
+function Products({ currentUser, filter = 'all' }) {
   const [products, setProducts] = useState([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)
@@ -70,10 +70,14 @@ function Products({ currentUser }) {
     else setPage(lastPage)
   }
 
+  const displayedProducts = filter === 'my'
+    ? products.filter((p) => p.owner_id === currentUser?.id)
+    : products
+
   return (
     <section className="products">
       <div className="products__header">
-        <h1>Products</h1>
+        <h1>{filter === 'my' ? 'My Products' : 'All Products'}</h1>
         <button onClick={() => setShowAdd(true)}>+ Add product</button>
       </div>
 
@@ -84,7 +88,7 @@ function Products({ currentUser }) {
       ) : (
         <>
           <div className="products__grid">
-            {products.map((product) => (
+            {displayedProducts.map((product) => (
               <ProductCard
                 key={product.id}
                 product={product}
@@ -94,6 +98,11 @@ function Products({ currentUser }) {
               />
             ))}
           </div>
+          {displayedProducts.length === 0 && !loading && (
+            <p className="products__empty">
+              {filter === 'my' ? 'You have not added any products yet.' : 'No products found.'}
+            </p>
+          )}
 
           <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
         </>

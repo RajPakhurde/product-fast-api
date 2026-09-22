@@ -209,13 +209,140 @@ button:disabled {
 }
 
 .app-header {
+  display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-bottom: 1px solid #e5e5e5;
+  background: #ffffff;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.app-header__brand {
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: #1a1a1a;
+  letter-spacing: -0.02em;
+  flex: 1;
+}
+
+.app-header__nav {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: #f4f4f5;
+  padding: 0.25rem;
+  border-radius: 8px;
+}
+
+.app-header__link {
+  background: transparent;
+  border: none;
+  color: #52525b;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.4rem 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.app-header__link:hover {
+  color: #18181b;
+  opacity: 1;
+}
+
+.app-header__link.is-active {
+  background: #ffffff;
+  color: #18181b;
+  font-weight: 600;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+}
+
+.app-header__user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex: 1;
+  justify-content: flex-end;
 }
 
 .app-header__user {
   font-size: 0.875rem;
-  color: #666;
+  color: #52525b;
+  font-weight: 500;
+}
+
+/* ---- users page ---- */
+.users-page {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+.users-page__header h1 {
+  margin: 0 0 1.25rem;
+}
+
+.users-table-container {
+  background: #fff;
+  border: 1px solid #e5e5e5;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.users-table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+  font-size: 0.875rem;
+}
+
+.users-table th,
+.users-table td {
+  padding: 0.85rem 1.15rem;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.users-table th {
+  background: #fafafa;
+  font-weight: 600;
+  color: #52525b;
+}
+
+.users-table tr:last-child td {
+  border-bottom: none;
+}
+
+.users-table__empty {
+  text-align: center;
+  color: #71717a;
+  padding: 2rem;
+}
+
+.role-badge {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  background: #e4e4e7;
+  color: #3f3f46;
+}
+
+.role-badge--admin {
+  background: #dbeafe;
+  color: #1d4ed8;
+}
+
+.products__empty {
+  margin-top: 2rem;
+  color: #71717a;
+  font-size: 0.9375rem;
+  text-align: center;
 }
 
 /* ---- products header ---- */
