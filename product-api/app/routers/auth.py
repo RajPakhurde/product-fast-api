@@ -54,19 +54,18 @@ def google_login(request: GoogleLoginRequest, response: Response, db: Session = 
     email = google_user["email"]
     name = google_user.get("name", email.split("@")[0])
 
-    user = db.query(User).filter(User.google_id == google_id).first()
+    # finding user by email
+    user = db.query(User).filter(User.email == email).first()
 
+    # user must already register in order to connect with google auth
     if not user:
-        user = db.query(User).filter(User.email == email).first()
+        raise HTTPException(status_code=401, detail="user not registered.")
 
-    if not user:
-        user = User(username= name, email = email, google_id = google_id, password = None)
+    if not user.google_auth_enabled:
+        raise HTTPException(status_code=403, detail="google auth is not unable for this user")
 
-        db.add(user)
-        db.commit()
-        db.refresh(user)
-
-    elif not user.google_id:
+    # link google auth to existing user
+    if not user.google_id:
         user.google_id = google_id
         db.commit()
         db.refresh(user)
