@@ -338,6 +338,47 @@ button:disabled {
   color: #1d4ed8;
 }
 
+.users-select {
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  border-radius: 6px;
+  border: 1px solid #d4d4d8;
+  background-color: #f4f4f5;
+  color: #27272a;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.15s ease;
+}
+
+.users-select:hover:not(:disabled) {
+  border-color: #a1a1aa;
+}
+
+.users-select:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.users-select--admin {
+  background-color: #dbeafe;
+  color: #1e40af;
+  border-color: #bfdbfe;
+}
+
+.users-select--enabled {
+  background-color: #dcfce7;
+  color: #166534;
+  border-color: #bbf7d0;
+}
+
+.users-select--disabled {
+  background-color: #fef2f2;
+  color: #991b1b;
+  border-color: #fecaca;
+}
+
 .products__empty {
   margin-top: 2rem;
   color: #71717a;
