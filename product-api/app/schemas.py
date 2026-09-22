@@ -50,3 +50,12 @@ class ProductResponse(BaseModel):
 
 class GoogleLoginRequest(BaseModel):
     credential: str
+
+
+class UpdateGoogleAuthRequest(BaseModel):
+    user_id: int
+    google_auth_enabled: bool
+    
+class UpdateRoleRequest(BaseModel):
+    user_id: int
+    role: str
