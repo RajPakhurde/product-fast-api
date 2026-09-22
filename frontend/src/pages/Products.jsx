@@ -3,10 +3,13 @@ import api from '../api/axios'
 import ProductCard from '../components/ProductCard'
 import Pagination from '../components/Pagination'
 import AddProductModal from '../components/AddProductModal'
+import { useAuth } from '../context/AuthContext'
 
 const LIMIT = 12
 
-function Products({ currentUser, filter = 'all' }) {
+function Products({ currentUser: propUser, filter = 'all' }) {
+  const { user: authUser } = useAuth()
+  const currentUser = propUser || authUser
   const [products, setProducts] = useState([])
   const [page, setPage] = useState(1)
   const [totalPages, setTotalPages] = useState(1)

@@ -1,13 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import api from '../api/axios'
+import { useAuth } from '../context/AuthContext'
 
-function Login({ onLoggedIn, onShowRegister, notice }) {
+function Login({ notice: propNotice }) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
   const [googleLoading, setGoogleLoading] = useState(false)
 
+  const { setUser } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const notice = propNotice || location.state?.notice
   const googleButtonRef = useRef(null)
 
   // Load and initialize Google Identity Services
@@ -68,7 +74,8 @@ function Login({ onLoggedIn, onShowRegister, notice }) {
       })
 
       // Backend has already set the HTTP-only auth cookie
-      onLoggedIn?.(data)
+      setUser(data)
+      navigate('/products')
     } catch (err) {
       setError(
         err.response?.data?.detail ||
@@ -92,7 +99,8 @@ function Login({ onLoggedIn, onShowRegister, notice }) {
         password,
       })
 
-      onLoggedIn?.(data)
+      setUser(data)
+      navigate('/products')
     } catch (err) {
       setError(
         err.response?.data?.detail ||
@@ -162,13 +170,9 @@ function Login({ onLoggedIn, onShowRegister, notice }) {
 
       <p className="login__switch">
         Don&apos;t have an account?{' '}
-        <button
-          type="button"
-          className="link"
-          onClick={onShowRegister}
-        >
+        <Link to="/register" className="link">
           Create new account
-        </button>
+        </Link>
       </p>
     </form>
   )

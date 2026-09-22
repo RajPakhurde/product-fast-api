@@ -1,12 +1,15 @@
 import { useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import api from '../api/axios'
 
-function Register({ onRegistered, onShowLogin }) {
+function Register() {
   const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  const navigate = useNavigate()
 
   async function handleSubmit(event) {
     event.preventDefault()
@@ -14,12 +17,10 @@ function Register({ onRegistered, onShowLogin }) {
     setLoading(true)
 
     try {
-      // /auth/register returns the new user, not a token — the caller sends
-      // us back to the login form to sign in.
       await api.post('/auth/register', { username, email, password })
-      onRegistered?.()
+      navigate('/login', { state: { notice: 'Account created — please sign in.' } })
     } catch (err) {
-      setError(err.message)
+      setError(err.response?.data?.detail || err.message)
     } finally {
       setLoading(false)
     }
@@ -68,9 +69,9 @@ function Register({ onRegistered, onShowLogin }) {
 
       <p className="login__switch">
         Already have an account?{' '}
-        <button type="button" className="link" onClick={onShowLogin}>
+        <Link to="/login" className="link">
           Sign in
-        </button>
+        </Link>
       </p>
     </form>
   )
