@@ -33,11 +33,11 @@ def verify_token(token: str):
 
 
 def set_auth_cookie(response: Response, token: str):
-    response.set_cookie(key=COOKIE_NAME,value=token,httponly=True,samesite="lax",secure=False,max_age=COOKIE_MAX_AGE,path="/",)
+    response.set_cookie(key=COOKIE_NAME,value=token, httponly=True, samesite="none", secure=True, max_age=COOKIE_MAX_AGE, path="/")
 
 
 def clear_auth_cookie(response: Response):
-    response.delete_cookie(key=COOKIE_NAME, path="/", samesite="lax")
+    response.delete_cookie(key=COOKIE_NAME, path="/", samesite="none", secure=True)
 
 
 def verify_google_auth_token(token:str):
