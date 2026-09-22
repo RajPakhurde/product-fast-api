@@ -81,7 +81,9 @@ function Products({ currentUser: propUser, filter = 'all' }) {
     <section className="products">
       <div className="products__header">
         <h1>{filter === 'my' ? 'My Products' : 'All Products'}</h1>
-        <button onClick={() => setShowAdd(true)}>+ Add product</button>
+        {filter !== 'all' && (
+          <button onClick={() => setShowAdd(true)}>+ Add product</button>
+        )}
       </div>
 
       {error && <p className="error">{error}</p>}
@@ -95,7 +97,7 @@ function Products({ currentUser: propUser, filter = 'all' }) {
               <ProductCard
                 key={product.id}
                 product={product}
-                canDelete={product.owner_id === currentUser?.id}
+                canDelete={filter !== 'all' && product.owner_id === currentUser?.id}
                 onDelete={handleDelete}
                 deleting={deletingId === product.id}
               />
